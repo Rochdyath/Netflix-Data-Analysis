@@ -21,3 +21,14 @@ def top_5_directors():
     top5 = z.tail(5)
     fig = px.bar(top5, x='counts', y='director', title='Top 5 Directors on Netflix')
     fig.show()
+
+def top_5_actors():
+    filtered_cast=dff['cast'].str.split(',',expand=True).stack()
+    filtered_cast=filtered_cast.to_frame()
+    filtered_cast.columns=['actor']
+    z = filtered_cast.groupby(['actor']).size().reset_index(name='counts')
+    z = z.sort_values(by = 'counts', ascending = True)
+    top5 = z.tail(5)
+    fig = px.bar(top5, x='counts', y='actor', title='Top 5 Actors on Netflix')
+    fig.show()
+
