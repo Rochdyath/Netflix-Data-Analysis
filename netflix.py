@@ -32,3 +32,10 @@ def top_5_actors():
     fig = px.bar(top5, x='counts', y='actor', title='Top 5 Actors on Netflix')
     fig.show()
 
+def trend_production():
+    df1 = dff[['type','release_year']]
+    df2 = df1.groupby(['release_year','type']).size().reset_index(name='counts')
+    df2 = df2[df2['release_year']>=2010]
+    df2=df2.rename(columns={"release_year": "Release Year"})
+    fig = px.line(df2, x="Release Year", y="counts", color='type',title='Trend of content produced over the years on Netflix')
+    fig.show()
