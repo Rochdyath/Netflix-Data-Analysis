@@ -4,8 +4,6 @@ import plotly.express as px # for data visualization
 from textblob import TextBlob # for sentiment analysis
 
 dff = pd.read_csv('netflix_titles.csv')
-# print(dff.shape)
-# print(dff.column)
 
 def distribution_of_content_ratings():
     z = dff.groupby(['rating']).size().reset_index(name='counts')
@@ -14,4 +12,12 @@ def distribution_of_content_ratings():
                     color_discrete_sequence=px.colors.qualitative.Set3)
     pieChart.show()
 
-distribution_of_content_ratings()
+def top_5_directors():
+    filtered_cast=dff['director'].str.split(',',expand=True).stack()
+    filtered_cast=filtered_cast.to_frame()
+    filtered_cast.columns=['director']
+    z = filtered_cast.groupby(['director']).size().reset_index(name='counts')
+    z = z.sort_values(by = 'counts', ascending = True)
+    top5 = z.tail(5)
+    fig = px.bar(top5, x='counts', y='director', title='Top 5 Directors on Netflix')
+    fig.show()
